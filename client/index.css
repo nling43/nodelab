@@ -1,0 +1,25 @@
+.user-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    justify-items: center;
+    margin: 1rem;
+
+}
+.log{
+    display: flex;
+    justify-content: center;
+}
+#text-log{
+      resize: none;
+      width: 30ch;
+}
+.user-container *{
+    width: 60%;
+    padding: 1rem;
+    border: 1px solid black;
+
+}
+::placeholder {
+    opacity: 1;
+}
+
