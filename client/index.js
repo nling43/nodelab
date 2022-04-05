@@ -1,4 +1,3 @@
-
 const url = "http://localhost:3000/api/user/"
 const container = document.getElementById("fromdb")
 const bCreate = document.getElementById("bCreate")
@@ -47,23 +46,16 @@ async function update(id) {
     if (!age) {
         age = parent.childNodes[3].attributes.placeholder.value
     }
-    const data = { "name": name, "age": age }
     const response = await fetch(
         url + id.slice(1),
         {
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data),
+            body: JSON.stringify({ "name": name, "age": age }),
             method: "PUT"
         }
     )
-
-
-    const toPrint = await response.json()
-    wrtieResponse(toPrint)
-
-
+    wrtieResponse(await response.json())
     reload()
-
 }
 
 function clearlog() {
@@ -74,24 +66,18 @@ function clearlog() {
 function wrtieResponse(res) {
     const textarea = document.getElementById("text-log")
     console.log(res);
-    textarea.value = res.method + " " + res.code + " " + res.error + "\n" + textarea.value
+    textarea.value = res.method + " " + res.code + " " + res.message + "\n" + textarea.value
 }
-
 bCreate.addEventListener("click", async () => {
-    const data = { "name": document.getElementById("name").value, "age": document.getElementById("age").value }
     const response = await fetch(
         url,
         {
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data),
+            body: JSON.stringify({ "name": document.getElementById("name").value, "age": document.getElementById("age").value }),
             method: "POST"
         }
     )
-    const toPrint = await response.json()
-    wrtieResponse(toPrint)
-
-
-
+    wrtieResponse(await response.json())
     reload()
 })
 document.addEventListener("DOMContentLoaded", reload)

@@ -1,6 +1,5 @@
 const express = require("express")
 const signale = require("signale")
-const { findOne } = require("../model/User")
 const User = require("../model/User")
 const router = express.Router()
 
@@ -13,8 +12,7 @@ router.get("/", async (req, res) => {
         res.status(200).send(users)
     } catch (error) {
         signale.error(error.name)
-        const toSend = { "code": 400, "method": "get", "error": error.name }
-        res.status(400).send(toSend)
+        res.status(400).send({ "code": 400, "method": "get", "message": error.name })
     }
 
 })
@@ -25,20 +23,16 @@ router.get('/:id', async (req, res) => {
         const user = await User.findById(req.params.id)
         if (!user) {
             signale.error("user not found")
-            const toSend = { "code": 404, "method": "get", "error": "Not found" }
-            res.status(404).send(toSend)
+            res.status(404).send({ "code": 404, "method": "get", "message": "Not found" }
+            )
         }
         else {
             res.status(200).send(user)
         }
     } catch (error) {
         signale.error(error.name)
-        const toSend = { "code": 400, "method": "get", "error": error.name }
-        res.status(400).send(toSend)
+        res.status(400).send({ "code": 400, "method": "get", "message": error.name })
     }
-
-
-
 })
 
 //c) Create a new user 
@@ -49,16 +43,14 @@ router.post("/", async (req, res) => {
     })
     try {
         const savedUser = await user.save()
-        const toSend = { "code": 201, "method": "POST", "error": "Created" }
-        res.status(201).send(toSend)
+        res.status(201).send({ "code": 201, "method": "POST", "message": "Created" })
 
     }
 
 
     catch (error) {
         signale.error(error.name)
-        const toSend = { "code": 400, "method": "PUT", "error": error.name }
-        res.status(400).send(toSend)
+        res.status(400).send({ "code": 400, "method": "PUT", "message": error.name })
 
     }
 
@@ -73,8 +65,7 @@ router.put("/:id", async (req, res) => {
 
         if (!user) {
             signale.error("Not found")
-            const toSend = { "code": 404, "method": "get", "error": "Not found" }
-            res.status(404).send(toSend)
+            res.status(404).send({ "code": 404, "method": "get", "message": "Not found" })
         }
 
         else {
@@ -85,20 +76,15 @@ router.put("/:id", async (req, res) => {
                 user.age = req.body.age
             }
             await user.save()
-            const toSend = { "code": 200, "method": "PUT", "error": "Success" }
-            res.status(200).send(toSend)
+            res.status(200).send({ "code": 200, "method": "PUT", "message": "OK" })
         }
     }
     catch (error) {
-        const toSend = { "code": 400, "method": "PUT", "error": error.name }
-        res.status(400).send(toSend)
+        res.status(400).send({ "code": 400, "method": "PUT", "message": error.name })
 
     }
 
 })
-
-
-
 
 //e) Delete a user
 
@@ -106,19 +92,16 @@ router.delete("/:id", async (req, res) => {
     try {
         const user = await User.findById(req.params.id)
         if (!user) {
-            const toSend = { "code": 404, "method": "DEL", "error": "Not found" }
-            res.status(404).send(toSend)
+            res.status(404).send({ "code": 404, "method": "DEL", "message": "Not found" })
         }
         else {
             user.delete()
-            const toSend = { "code": 200, "method": "DEL", "error": "Success" }
-            res.status(200).send(toSend)
-
+            res.status(200).send({ "code": 200, "method": "DEL", "message": "OK" })
         }
     }
     catch (error) {
-        const toSend = { "code": 400, "method": "DEL", "error": error.name }
-        res.status(400).send(toSend)
+        res.status(400).send({ "code": 400, "method": "DEL", "message": error.name })
     }
 })
+
 module.exports = router
